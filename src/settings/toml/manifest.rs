@@ -561,9 +561,16 @@ impl LazyAccountId {
             if let Ok(user) = GlobalUser::new() {
                 let accounts = fetch_accounts(&user)?;
                 let account_id = match accounts.as_slice() {
+                    [] => unreachable!("auth token without account?"),
                     [single] => single.id.clone(),
-                    _ => todo!(),
+                    _multiple => {
+                        StdOut::user_error("You have multiple accounts.\n\
+                            Please choose one from below and add it to `wrangler.toml` under `account_id`.");
+                        whoami::display_account_id_maybe();
+                        anyhow::bail!("")
+                    }
                 };
+
                 return Ok(account_id);
             }
 
