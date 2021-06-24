@@ -12,7 +12,7 @@ jobs:
       - name: Install Rust
         run: |
           rustup update stable
-          rustup default stable
+          rustup override set stable
           rustup component add rustfmt
           rustup component add clippy
 
